@@ -143,7 +143,7 @@ func getRange(w http.ResponseWriter, r *http.Request) {
 	// Set filter with given range
 	filt := expression.Name("Date").Between(expression.Value(req.DateStart), expression.Value(req.DateEnd))
 
-	proj := expression.NamesList(expression.Name("Date"), expression.Name("Id"), expression.Name("Value"))
+	proj := expression.NamesList(expression.Name("Date"), expression.Name("Id"), expression.Name("Value"), expression.Name("Type"))
 
 	expr, err := expression.NewBuilder().WithFilter(filt).WithProjection(proj).Build()
 
