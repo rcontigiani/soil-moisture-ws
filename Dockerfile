@@ -1,11 +1,12 @@
-ARG GO_VERSION=1.14.3
-FROM golang:${GO_VERSION}-alpine AS builder
+FROM golang:alpine as builder
+WORKDIR /app
+ADD . /app
+RUN cd /app && go build -o goapp
 
-RUN apk add --no-cache ca-certificates git
+FROM alpine
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+WORKDIR /app
+COPY --from=builder /app/goapp /app
 
-WORKDIR /
-ENV CGO_ENABLED=0
-COPY ./go.mod ./go.sum ./main.go ./ 
-RUN go build
-
-CMD ./soil-moisture-ws
+EXPOSE 8080
+ENTRYPOINT ./goapp
